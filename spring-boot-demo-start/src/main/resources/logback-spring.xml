@@ -1,0 +1,60 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                [%boldYellow(%d{yyyy-MM-dd' 'HH:mm:ss.sss})] [%highlight(%5p)] [%boldGreen(%t)] [%cyan(%logger{36})] %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <springProperty name="LOG_HOME" scope="context" source="logging.file.path" />
+    <springProperty name="LOG_FILE_CAP" scope="context" source="logging.file.capacity" />
+
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>15</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>${LOG_FILE_CAP}</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                [%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%5p] [%t] [%logger{36}] %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>${LOG_FILE_CAP}</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                [%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%5p] [%t] [%logger{36}] %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+</configuration>
